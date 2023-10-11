@@ -96,7 +96,7 @@ if submitted:
                 # Calling the replicate API to get the image
                 with generated_images_placeholder.container():
                     all_images = []  # List to store all generated images
-                    output = replicate.run(
+                    if output := replicate.run(
                         REPLICATE_MODEL_ENDPOINTSTABILITY,
                         input={
                             "prompt": prompt,
@@ -108,10 +108,9 @@ if submitted:
                             "guidance_scale": guidance_scale,
                             "prompt_stregth": prompt_strength,
                             "refine": refine,
-                            "high_noise_frac": high_noise_frac
-                        }
-                    )
-                    if output:
+                            "high_noise_frac": high_noise_frac,
+                        },
+                    ):
                         st.toast('Your image has been generated!', icon='😍')
                         # Save generated image to session state
                         st.session_state.generated_image = output
@@ -150,10 +149,6 @@ if submitted:
                           state="complete", expanded=False)
         except Exception as e:
             st.error(f'Encountered an error: {e}', icon="🚨")
-
-# If not submitted, chill here 🍹
-else:
-    pass
 
 # --- Gallery Display for inspiration or just plain admiration --- #
 with gallery_placeholder.container():
